@@ -1,6 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+import ProfilePageSkeleton from '@/components/skeletons/ProfilePage';
 
 // Mock user data for UI display
 const mockUser = {
@@ -22,6 +25,8 @@ const mockSubscriptionData = {
 };
 
 export default function ProfilePage() {
+  const router = useRouter();
+
   const [loading] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
   
@@ -41,60 +46,12 @@ export default function ProfilePage() {
     console.log('Navigate to jobs');
   };
 
+  const handleCancel = () => {
+    router.push('/cancel'); // Redirect to cancel page
+  };
+
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 py-12">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white shadow rounded-lg overflow-hidden">
-            {/* Header skeleton */}
-            <div className="px-6 py-8 border-b border-gray-200 bg-gradient-to-r from-purple-50 to-indigo-50">
-              <div className="flex items-center justify-between">
-                <div className="h-8 w-40 bg-gradient-to-r from-gray-200 to-gray-300 rounded animate-pulse"></div>
-                <div className="flex space-x-3">
-                  <div className="h-10 w-32 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg animate-pulse"></div>
-                  <div className="h-10 w-24 bg-gradient-to-r from-gray-200 to-gray-300 rounded-md animate-pulse"></div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Profile Info skeleton */}
-            <div className="px-6 py-6 border-b border-gray-200">
-              <div className="h-6 w-56 bg-gradient-to-r from-gray-200 to-gray-300 rounded mb-4 animate-pulse"></div>
-              <div className="space-y-6">
-                <div>
-                  <div className="h-4 w-20 bg-gradient-to-r from-gray-200 to-gray-300 rounded mb-2 animate-pulse"></div>
-                  <div className="h-5 w-48 bg-gradient-to-r from-gray-200 to-gray-300 rounded animate-pulse"></div>
-                </div>
-                <div>
-                  <div className="h-4 w-36 bg-gradient-to-r from-gray-200 to-gray-300 rounded mb-2 animate-pulse"></div>
-                  <div className="h-5 w-20 bg-gradient-to-r from-gray-200 to-gray-300 rounded animate-pulse"></div>
-                </div>
-                <div>
-                  <div className="h-4 w-48 bg-gradient-to-r from-gray-200 to-gray-300 rounded mb-2 animate-pulse"></div>
-                  <div className="h-5 w-32 bg-gradient-to-r from-gray-200 to-gray-300 rounded animate-pulse"></div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Support skeleton */}
-            <div className="px-6 py-6 border-b border-gray-200">
-              <div className="h-6 w-24 bg-gradient-to-r from-gray-200 to-gray-300 rounded mb-4 animate-pulse"></div>
-              <div className="h-12 w-full bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg animate-pulse"></div>
-            </div>
-            
-            {/* Subscription Management skeleton */}
-            <div className="px-6 py-6">
-              <div className="h-6 w-56 bg-gradient-to-r from-gray-200 to-gray-300 rounded mb-4 animate-pulse"></div>
-              <div className="space-y-4">
-                <div className="h-12 w-full bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg animate-pulse"></div>
-                <div className="h-12 w-full bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg animate-pulse delay-75"></div>
-                <div className="h-12 w-full bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg animate-pulse delay-150"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return (<ProfilePageSkeleton />);
   }
 
   return (
@@ -248,9 +205,7 @@ export default function ProfilePage() {
                       <span className="text-sm font-medium">View billing history</span>
                     </button>
                     <button
-                      onClick={() => {
-                        console.log('Cancel button clicked - no action');
-                      }}
+                      onClick={() => handleCancel()}
                       className="inline-flex items-center justify-center w-full px-4 py-3 bg-white border border-red-200 text-red-600 rounded-lg hover:bg-red-50 hover:border-red-300 transition-all duration-200 shadow-sm group"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
