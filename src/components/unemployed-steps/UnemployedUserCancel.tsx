@@ -1,36 +1,36 @@
 'use client';
 
-import EmployedUserStep1 from '@/components/employed-steps/EmployedUserStep1';
-import EmployedUserStep2 from '@/components/employed-steps/EmployedUserStep2';
-import EmployedUserStep3 from '@/components/employed-steps/EmployedUserStep3';
-import EmployedUserSuccess from '@/components/employed-steps/EmployedUserSuccess';
+import UnemployedUserStep1 from "@/components/unemployed-steps/UnemployedUserStep1";
+import UnemployedUserStep2 from "@/components/unemployed-steps/UnemployedUserStep2";
+import UnemployedUserStep3 from "@/components/unemployed-steps/UnemployedUserStep3";
+import UnemployedUserSuccess from "@/components/unemployed-steps/UnemployedUserSuccess";
 
 import SkylineImage from '@/components/images/SkylineImage';
 import BackIcon from "@/components/icons/BackIcon";
 
 
-type EmployedUserCancelProps = {
+type UnemployedUserCancelProps = {
     step: number;
     totalSteps: number;
     onBack: () => void;
     onSubmit: () => void;
 };
 
-export default function EmployedUserCancel(props:EmployedUserCancelProps) {
+export default function UnemployedUserCancel(props:UnemployedUserCancelProps) {
 
     const getCurrentStep = () => {
         switch (props.step) {
             case 0:
-                return (<EmployedUserStep1 onSubmit={() => props.onSubmit()} />);
+                return (<UnemployedUserStep1 onSubmit={() => props.onSubmit()} />);
 
             case 1:
-                return (<EmployedUserStep2 onSubmit={() => props.onSubmit()} />);
+                return (<UnemployedUserStep2 onSubmit={() => props.onSubmit()} />);
 
             case 2:
-                return (<EmployedUserStep3 onSubmit={() => props.onSubmit()} />);
+                return (<UnemployedUserStep3 onSubmit={() => props.onSubmit()} />);
 
             case 3:
-                return (<EmployedUserSuccess />);
+                return (<UnemployedUserSuccess />);
         }
     };
 
