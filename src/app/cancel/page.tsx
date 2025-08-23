@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 // components
@@ -22,8 +22,13 @@ export default function CancelPage() {
     // state
     const [hasJob, setHasJob] = useState<boolean|null>(null);
     const [step, setStep] = useState<number>(INITIAL_STEP);
-    const { setState } = useCancelFlowStore();
+    const { state, setState } = useCancelFlowStore();
 
+    const downSellVariant = state.downsell_variant;
+
+    useEffect(() => {
+        if(hasJob === false && state.downsell_variant === "A")  setStep(1);
+    }, [state.downsell_variant, hasJob]);
 
     // handle functions
     const handleCloseButtonClick = () => {
@@ -75,8 +80,10 @@ export default function CancelPage() {
                     <UnemployedUserCancel
                         step={step}
                         totalSteps={TOTAL_STEPS}
+                        downSell={downSellVariant}
                         onBack={handleBack}
                         onSubmit={() => { if(step < TOTAL_STEPS )   setStep(step + 1); }}
+                        onAccept={() => setStep(TOTAL_STEPS)}
                     />
                 }
 
