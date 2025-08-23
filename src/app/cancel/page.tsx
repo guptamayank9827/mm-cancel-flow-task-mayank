@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 // components
 import Header from '@/components/Header';
 import StartCancel from '@/components/StartCancel';
+import EmployedUserCancel from '@/components/employed-steps/EmployedUserCancel';
+
 
 const TOTAL_STEPS = 3;
 const INITIAL_STEP = -1;
@@ -56,7 +58,12 @@ export default function CancelPage() {
                 }
 
                 {hasJob === true &&
-                    <div>YES JOB</div>
+                    <EmployedUserCancel
+                        step={step}
+                        totalSteps={TOTAL_STEPS}
+                        onBack={handleBack}
+                        onSubmit={() => { if(step < TOTAL_STEPS )   setStep(step + 1); }}
+                    />
                 }
 
                 {hasJob === false &&
