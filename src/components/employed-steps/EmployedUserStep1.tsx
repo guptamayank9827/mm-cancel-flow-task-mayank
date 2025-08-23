@@ -3,13 +3,13 @@
 import { useState } from 'react';
 import Title from '@/components/Title';
 import FormInput from '@/components/FormInput';
-import { Question } from '@/lib/types';
+import { SingleChoiceQuestion } from '@/lib/types';
 
 type EmployedUserStep1Props = {
     onSubmit: () => void;
 };
 
-const QUESTIONS:Question[] = [
+const QUESTIONS:SingleChoiceQuestion[] = [
     {
         id: 0,
         question: "Did you find this job with MigrateMate?*",
@@ -77,7 +77,7 @@ export default function EmployedUserStep1(props:EmployedUserStep1Props) {
 
             <hr className="md:hidden mt-2 mb-2 border-gray-200" />
 
-            {QUESTIONS.map((question:Question) => (
+            {QUESTIONS.map((question:SingleChoiceQuestion) => (
                 <FormInput
                     key={question.id}
                     question={question}

@@ -7,4 +7,11 @@ export type SingleChoiceQuestion = {
     options: string[]
 };
 
-export type Question = SingleChoiceQuestion;
+export type TextAreaQuestion = {
+    id: number,
+    question: string,
+    type: "textarea",
+    minChars: number
+};
+
+export type Question = SingleChoiceQuestion | TextAreaQuestion;
