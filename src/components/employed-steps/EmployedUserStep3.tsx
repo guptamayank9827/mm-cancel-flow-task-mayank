@@ -81,6 +81,7 @@ export default function EmployedUserStep3(props:EmployedUserStep3Props) {
                 key={`q` + QUESTION.id}
                 question={QUESTION}
                 selectedValue={hasLawyer}
+                placeholder="Enter visa type"
                 onSelect={(questionId:number, value:string) => handleLawyerChange(questionId, value)}
             />
 

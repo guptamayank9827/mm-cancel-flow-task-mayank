@@ -6,9 +6,8 @@ export const CancelFlowSchema = z.object({
     foundViaMM: z.enum(["yes", "no"]).nullable().default(null),
     hasLawyer: z.enum(["yes", "no"]).nullable().default(null),
     flowCompletedEmployed: z.boolean().default(false),
-    downsell_variant: z.enum(["A", "B"]).nullable().default("B"),
-
-
+    flowCompletedUnemployed: z.boolean().default(false),
+    downsell_variant: z.enum(["A", "B"]).nullable().default(null)
 });
 
 export type CancelFlowState = z.infer<typeof CancelFlowSchema>;
@@ -22,7 +21,8 @@ export const useCancelFlowStore = create<{
         foundViaMM: null,
         hasLawyer: null,
         flowCompletedEmployed: false,
-        downsell_variant: "B"
+        flowCompletedUnemployed: false,
+        downsell_variant: null
     },
     setState: (newState) => {
         const merged = { ...useCancelFlowStore.getState().state, ...newState };

@@ -27,4 +27,11 @@ export type TextQuestion = {
     type: "text"
 };
 
-export type Question = SingleChoiceQuestion | TextAreaQuestion | RadioQuestion | TextQuestion;
+export type NumberQuestion = {
+    id: number,
+    question: string,
+    type: "number",
+    symbol: string
+};
+
+export type Question = SingleChoiceQuestion | TextAreaQuestion | RadioQuestion | TextQuestion | NumberQuestion;
