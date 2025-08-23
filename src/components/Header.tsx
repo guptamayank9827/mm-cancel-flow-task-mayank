@@ -8,12 +8,14 @@ import CloseIcon from "@/components/icons/CloseIcon";
 type HeaderProps = {
     step: number;
     totalSteps: number;
+    downSellAccepted?: boolean;
     onClose: () => void;
     onBack: () => void;
 };
 
 export default function Header(props:HeaderProps) {
-    const title = `Subscription ${props.step === props.totalSteps ? 'Cancelled':'Cancellation'}`;
+    let title = "Subscription";
+    if(props.downSellAccepted === false)  title = `Subscription ${props.step === props.totalSteps ? 'Cancelled':'Cancellation'}`;
 
     const handleClose = () => {
         props.onClose();
@@ -41,7 +43,7 @@ export default function Header(props:HeaderProps) {
                 <div className="text-lg text-gray-700 flex flex-wrap flex-1 justify-start md:justify-center ml-4 md:ml-0">
                     <span className="inline">{title}</span>
 
-                    {props.step >= 0 &&
+                    {props.step >= 0 && props.downSellAccepted === false &&
                         <ProgressBar
                             step={props.step}
                             totalSteps={props.totalSteps}

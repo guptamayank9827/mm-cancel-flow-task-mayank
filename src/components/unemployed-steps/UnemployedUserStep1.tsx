@@ -3,7 +3,7 @@
 import Title from "@/components/Title";
 
 type UnemployedUserStep1Props = {
-    downSell: string|null;
+    downSellVariant: string|null;
     onSubmit: () => void;
     onAccept: () => void;
 };

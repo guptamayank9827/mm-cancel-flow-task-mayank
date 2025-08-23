@@ -2,11 +2,12 @@
 
 type TitleProps = {
     title: string;
+    heading?: string;
     subtitle?: string;
 };
 
 export default function Title(props:TitleProps) {
-    const {title, subtitle} = props;
+    const {title, heading, subtitle} = props;
 
     return(
         <>
@@ -15,8 +16,12 @@ export default function Title(props:TitleProps) {
                 dangerouslySetInnerHTML={{ __html: title }}
             />
 
+            {heading &&
+                <p className="mt-4 md:mt-6 text-lg font-bold text-black" dangerouslySetInnerHTML={{ __html: heading }} />
+            }
+
             {subtitle &&
-                <p className="mt-4 md:mt-6 text-sm text-black" dangerouslySetInnerHTML={{ __html: subtitle }} />
+                <p className="mt-4 md:mt-6 text-md text-black" dangerouslySetInnerHTML={{ __html: subtitle }} />
             }
         </>
     );

@@ -22,6 +22,7 @@ export default function CancelPage() {
     // state
     const [hasJob, setHasJob] = useState<boolean|null>(null);
     const [step, setStep] = useState<number>(INITIAL_STEP);
+    const [downSellAccepted, setDownSellAccepted] = useState<boolean>(false);
     const { state, setState } = useCancelFlowStore();
 
     const downSellVariant = state.downsell_variant;
@@ -47,7 +48,12 @@ export default function CancelPage() {
         setStep(0);
         setState({ employed: jobStatus === true ? "yes" : "no"});
     }
-    
+
+    const handleDownsellOfferAccept = () => {
+        setStep(TOTAL_STEPS);
+        setDownSellAccepted(true);
+    }
+
 
     return(
         <div className="min-h-screen bg-gray-50 py-12 relative">
@@ -56,6 +62,7 @@ export default function CancelPage() {
                 <Header
                     step={step}
                     totalSteps={TOTAL_STEPS}
+                    downSellAccepted={downSellAccepted}
                     onClose={handleCloseButtonClick}
                     onBack={handleBack}
                 />
@@ -80,10 +87,11 @@ export default function CancelPage() {
                     <UnemployedUserCancel
                         step={step}
                         totalSteps={TOTAL_STEPS}
-                        downSell={downSellVariant}
+                        downSellVariant={downSellVariant}
+                        downSellAccepted={downSellAccepted}
                         onBack={handleBack}
                         onSubmit={() => { if(step < TOTAL_STEPS )   setStep(step + 1); }}
-                        onAccept={() => setStep(TOTAL_STEPS)}
+                        onAccept={() => handleDownsellOfferAccept()}
                     />
                 }
 

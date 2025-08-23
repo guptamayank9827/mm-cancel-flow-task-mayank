@@ -12,7 +12,8 @@ import BackIcon from "@/components/icons/BackIcon";
 type UnemployedUserCancelProps = {
     step: number;
     totalSteps: number;
-    downSell: string|null;
+    downSellVariant: string|null;
+    downSellAccepted: boolean;
     onBack: () => void;
     onSubmit: () => void;
     onAccept: () => void;
@@ -23,7 +24,7 @@ export default function UnemployedUserCancel(props:UnemployedUserCancelProps) {
     const getCurrentStep = () => {
         switch (props.step) {
             case 0:
-                return (<UnemployedUserStep1 downSell={props.downSell} onSubmit={() => props.onSubmit()} onAccept={() => props.onAccept()} />);
+                return (<UnemployedUserStep1 downSellVariant={props.downSellVariant} onSubmit={() => props.onSubmit()} onAccept={() => props.onAccept()} />);
 
             case 1:
                 return (<UnemployedUserStep2 onSubmit={() => props.onSubmit()} />);
@@ -32,7 +33,7 @@ export default function UnemployedUserCancel(props:UnemployedUserCancelProps) {
                 return (<UnemployedUserStep3 onSubmit={() => props.onSubmit()} />);
 
             case 3:
-                return (<UnemployedUserSuccess />);
+                return (<UnemployedUserSuccess downSellAccepted={props.downSellAccepted} />);
         }
     };
 
