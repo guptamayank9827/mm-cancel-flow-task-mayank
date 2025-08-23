@@ -1,3 +1,5 @@
+"use client";
+
 import { SingleChoiceQuestion } from '@/lib/types';
 
 type SingleChoiceProps = {

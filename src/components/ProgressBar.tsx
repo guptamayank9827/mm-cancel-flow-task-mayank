@@ -1,3 +1,4 @@
+"use client";
 
 type ProgressProps = {
     step: number;

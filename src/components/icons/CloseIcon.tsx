@@ -1,3 +1,5 @@
+"use client";
+
 interface CloseIconProps {
     width?: number;
     height?: number;

@@ -1,3 +1,5 @@
+"use client";
+
 interface BackIconProps {
     width?: number;
     height?: number;
