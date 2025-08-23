@@ -9,6 +9,8 @@ import StartCancel from '@/components/StartCancel';
 import EmployedUserCancel from '@/components/employed-steps/EmployedUserCancel';
 import UnemployedUserCancel from '@/components/unemployed-steps/UnemployedUserCancel';
 
+import { useCancelFlowStore } from "@/store/CancelFlow";
+
 
 
 const TOTAL_STEPS = 3;
@@ -20,6 +22,7 @@ export default function CancelPage() {
     // state
     const [hasJob, setHasJob] = useState<boolean|null>(null);
     const [step, setStep] = useState<number>(INITIAL_STEP);
+    const { setState } = useCancelFlowStore();
 
 
     // handle functions
@@ -37,7 +40,7 @@ export default function CancelPage() {
     const handleJobChange = (jobStatus:boolean|null) => {
         setHasJob(jobStatus);
         setStep(0);
-        // persist job status
+        setState({ employed: jobStatus === true ? "yes" : "no"});
     }
     
 

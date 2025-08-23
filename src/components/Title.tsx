@@ -16,9 +16,7 @@ export default function Title(props:TitleProps) {
             />
 
             {subtitle &&
-                <p className="mt-4 md:mt-6 text-sm text-black">
-                    {subtitle}
-                </p>
+                <p className="mt-4 md:mt-6 text-sm text-black" dangerouslySetInnerHTML={{ __html: subtitle }} />
             }
         </>
     );

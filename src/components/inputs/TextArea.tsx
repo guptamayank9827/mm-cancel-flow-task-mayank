@@ -11,8 +11,10 @@ type TextAreaProps = {
 };
 
 export default function TextArea(props:TextAreaProps) {
-    let {selectedValue} = props;    
-    let {id, question, minChars} = props.question;
+    let {selectedValue} = props;
+    const {id, question} = props.question;
+    let {minChars} = props.question;
+
     selectedValue = selectedValue ?? "";
     minChars = minChars ?? 0;
     

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Title from '@/components/Title';
 import FormInput from '@/components/FormInput';
 import { SingleChoiceQuestion } from '@/lib/types';
+import { useCancelFlowStore } from "@/store/CancelFlow";
 
 type EmployedUserStep1Props = {
     onSubmit: () => void;
@@ -41,6 +42,7 @@ export default function EmployedUserStep1(props:EmployedUserStep1Props) {
     const [appliedCount, setAppliedCount] = useState<string | null>(null);
     const [emailedCount, setEmailedCount] = useState<string | null>(null);
     const [interviewedCount, setInterviewedCount] = useState<string | null>(null);
+    const { setState } = useCancelFlowStore();
 
     const canMoveAhead = true;
 
@@ -56,6 +58,7 @@ export default function EmployedUserStep1(props:EmployedUserStep1Props) {
 
     const moveToNextStep = () => {
         props.onSubmit();
+        setState({ foundViaMM:foundViaMM === "yes" ? "yes" : "no" });
     }
 
     const getSelectedValueByQuestionId = (id:number) => {

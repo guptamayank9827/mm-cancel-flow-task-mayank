@@ -8,7 +8,6 @@ import EmployedUserSuccess from '@/components/employed-steps/EmployedUserSuccess
 import SkylineImage from '@/components/images/SkylineImage';
 import BackIcon from "@/components/icons/BackIcon";
 
-
 type EmployedUserCancelProps = {
     step: number;
     totalSteps: number;

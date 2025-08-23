@@ -1,8 +1,11 @@
 "use client";
 
 import SingleChoice from '@/components/inputs/SingleChoice';
+import TextArea from '@/components/inputs/TextArea';
+import Radio from '@/components/inputs/Radio';
+import Text from '@/components/inputs/Text';
 import { Question } from '@/lib/types';
-import TextArea from './inputs/TextArea';
+
 
 type FormInputProps = {
     question: Question;
@@ -22,7 +25,13 @@ export default function FormInput(props:FormInputProps) {
 
             case "textarea":
                 return (<TextArea question={question} selectedValue={selectedValue} showError={showError} onSelect={props.onSelect} onValidate={props.onValidate} />);
-        
+
+            case "radio":
+                return (<Radio question={question} selectedValue={selectedValue} onSelect={props.onSelect} />);
+            
+            case "text":
+                return (<Text question={question} selectedValue={selectedValue} onSelect={props.onSelect} />);
+
             default:
                 return (<div>Unknown Input Type</div>);
         }

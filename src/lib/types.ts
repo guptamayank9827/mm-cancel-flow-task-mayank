@@ -14,4 +14,17 @@ export type TextAreaQuestion = {
     minChars: number
 };
 
-export type Question = SingleChoiceQuestion | TextAreaQuestion;
+export type RadioQuestion = {
+    id: number,
+    question: string,
+    type: "radio",
+    options: string[]
+};
+
+export type TextQuestion = {
+    id: number,
+    question: string,
+    type: "text"
+};
+
+export type Question = SingleChoiceQuestion | TextAreaQuestion | RadioQuestion | TextQuestion;
