@@ -14,13 +14,13 @@ import { useCancelFlowStore } from "@/store/CancelFlow";
 
 
 const TOTAL_STEPS = 3;
-const INITIAL_STEP = -1;
+const INITIAL_STEP = 1;
 
 export default function CancelPage() {
     const router = useRouter();
 
     // state
-    const [hasJob, setHasJob] = useState<boolean|null>(null);
+    const [hasJob, setHasJob] = useState<boolean|null>(false);
     const [step, setStep] = useState<number>(INITIAL_STEP);
     const [downSellAccepted, setDownSellAccepted] = useState<boolean>(false);
     const { state, setState } = useCancelFlowStore();

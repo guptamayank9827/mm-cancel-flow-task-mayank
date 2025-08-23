@@ -27,7 +27,7 @@ export default function UnemployedUserCancel(props:UnemployedUserCancelProps) {
                 return (<UnemployedUserStep1 downSellVariant={props.downSellVariant} onSubmit={() => props.onSubmit()} onAccept={() => props.onAccept()} />);
 
             case 1:
-                return (<UnemployedUserStep2 onSubmit={() => props.onSubmit()} />);
+                return (<UnemployedUserStep2 downSellVariant={props.downSellVariant} onSubmit={() => props.onSubmit()} onAccept={() => props.onAccept()} />);
 
             case 2:
                 return (<UnemployedUserStep3 onSubmit={() => props.onSubmit()} />);
