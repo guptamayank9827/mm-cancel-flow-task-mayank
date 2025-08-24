@@ -14,6 +14,7 @@ type UnemployedUserCancelProps = {
     totalSteps: number;
     downSellVariant: string|null;
     downSellAccepted: boolean;
+    monthlyPricing: number;
     onBack: () => void;
     onSubmit: () => void;
     onAccept: () => void;
@@ -24,16 +25,16 @@ export default function UnemployedUserCancel(props:UnemployedUserCancelProps) {
     const getCurrentStep = () => {
         switch (props.step) {
             case 0:
-                return (<UnemployedUserStep1 downSellVariant={props.downSellVariant} onSubmit={() => props.onSubmit()} onAccept={() => props.onAccept()} />);
+                return (<UnemployedUserStep1 downSellVariant={props.downSellVariant} monthlyPricing={props.monthlyPricing} onSubmit={() => props.onSubmit()} onAccept={() => props.onAccept()} />);
 
             case 1:
-                return (<UnemployedUserStep2 downSellVariant={props.downSellVariant} onSubmit={() => props.onSubmit()} onAccept={() => props.onAccept()} />);
+                return (<UnemployedUserStep2 downSellVariant={props.downSellVariant} monthlyPricing={props.monthlyPricing} onSubmit={() => props.onSubmit()} onAccept={() => props.onAccept()} />);
 
             case 2:
-                return (<UnemployedUserStep3 downSellVariant={props.downSellVariant} onSubmit={() => props.onSubmit()} onAccept={() => props.onAccept()} />);
+                return (<UnemployedUserStep3 downSellVariant={props.downSellVariant} downSellAccepted={props.downSellAccepted} monthlyPricing={props.monthlyPricing} onSubmit={() => props.onSubmit()} onAccept={() => props.onAccept()} />);
 
             case 3:
-                return (<UnemployedUserSuccess downSellAccepted={props.downSellAccepted} />);
+                return (<UnemployedUserSuccess downSellAccepted={props.downSellAccepted} monthlyPricing={props.monthlyPricing} />);
         }
     };
 

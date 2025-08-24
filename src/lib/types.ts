@@ -1,4 +1,4 @@
-export type QuestionType = "single-choice" | "text";
+// export type QuestionType = "single-choice" | "text" | "textarea" | "radio" | "number";
 
 export type SingleChoiceQuestion = {
     id: number,

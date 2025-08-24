@@ -1,35 +1,61 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useCancelFlowStore } from "@/store/CancelFlow";
+import { fetchUser, fetchUserSubscription, setSubscriptionStatus } from '@/utils/utils';
 
 import ProfilePageSkeleton from '@/components/skeletons/ProfilePage';
 
 // Mock user data for UI display
-const mockUser = {
-  email: 'user@example.com',
-  id: '1'
-};
+const mockUserEmail = 'user1@example.com';
+const mockSubscriptionCurrentPeriodEnd = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(); // 30 days from now
 
-// Mock subscription data for UI display
-const mockSubscriptionData = {
-  status: 'active',
-  isTrialSubscription: false,
-  cancelAtPeriodEnd: false,
-  currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
-  monthlyPrice: 25,
-  isUCStudent: false,
-  hasManagedAccess: false,
-  managedOrganization: null,
-  downsellAccepted: false
-};
 
 export default function ProfilePage() {
   const router = useRouter();
 
-  const [loading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isSigningOut, setIsSigningOut] = useState(false);
-  
+  const {state, setState} = useCancelFlowStore();
+
+  useEffect(() => {
+    initializeFlow();
+  }, []);
+
+  useEffect(() => {
+      if (state.user?.id)   fetchAndSetUserSubscription(state.user.id);
+    }, [state.user]);
+
+  const initializeFlow = async () => {
+    await fetchAndSetUser();
+  }
+
+  const fetchAndSetUser = async () => {
+    try {
+      const user = await fetchUser(mockUserEmail);
+      setState({user});
+    } catch (error) {
+      console.log(error);
+    }
+    finally {
+      setLoading(false);
+    }
+  }
+
+  const fetchAndSetUserSubscription = async (userId:string) => {
+    try {
+      const subscription = await fetchUserSubscription(userId);
+      setState({subscription});
+    }
+    catch (error) {
+        console.log(error);
+    }
+    finally {
+      setLoading(false);
+    }
+  }
+
   // New state for settings toggle
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
 
@@ -46,7 +72,29 @@ export default function ProfilePage() {
     console.log('Navigate to jobs');
   };
 
-  const handleCancel = () => {
+  const handleCancel = async () => {
+    // update db subscription status
+    if(state.subscription?.status !== "pending_cancellation") {
+      
+      await setSubscriptionStatus(state.subscription?.id || "", "pending_cancellation");
+
+      if (
+        state.subscription &&
+        state.subscription.id &&
+        state.subscription.user_id &&
+        typeof state.subscription.monthly_price === "number"
+      ) {
+        const updatedSubscription = {
+          id: state.subscription.id,
+          user_id: state.subscription.user_id,
+          monthly_price: state.subscription.monthly_price,
+          status: "pending_cancellation" as const
+        };
+
+        setState({ subscription: updatedSubscription });
+      }
+    }
+
     router.push('/cancel'); // Redirect to cancel page
   };
 
@@ -94,7 +142,7 @@ export default function ProfilePage() {
             <div className="space-y-3">
               <div>
                 <p className="text-sm font-medium text-gray-500">Email</p>
-                <p className="mt-1 text-md text-gray-900">{mockUser.email}</p>
+                <p className="mt-1 text-md text-gray-900">{mockUserEmail}</p>
               </div>
               <div className="pt-2 space-y-3">
                 <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
@@ -107,15 +155,25 @@ export default function ProfilePage() {
                     <p className="text-sm font-medium text-gray-900">Subscription status</p>
                   </div>
                   <div className="flex items-center space-x-2">
-                    {mockSubscriptionData.status === 'active' && !mockSubscriptionData.isTrialSubscription && !mockSubscriptionData.cancelAtPeriodEnd && (
+                    {state.subscription?.status === 'active' && (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-green-50 text-green-700 border border-green-200">
                         Active
+                      </span>
+                    )}
+                    {state.subscription?.status === 'pending_cancellation' && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-50 text-gray-700 border border-gray-200">
+                        Pending Cancellation
+                      </span>
+                    )}
+                    {state.subscription?.status === 'cancelled' && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-red-50 text-red-700 border border-red-200">
+                        Cancelled
                       </span>
                     )}
                   </div>
                 </div>
 
-                {mockSubscriptionData.status === 'active' && !mockSubscriptionData.isTrialSubscription && !mockSubscriptionData.cancelAtPeriodEnd && (
+                {state.subscription?.status === 'active' && (
                   <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                     <div className="flex items-center space-x-3">
                       <div className="flex-shrink-0">
@@ -126,7 +184,7 @@ export default function ProfilePage() {
                       <p className="text-sm font-medium text-gray-900">Next payment</p>
                     </div>
                     <p className="text-sm font-medium text-gray-900">
-                      {mockSubscriptionData.currentPeriodEnd && new Date(mockSubscriptionData.currentPeriodEnd).toLocaleDateString('en-US', {
+                      {mockSubscriptionCurrentPeriodEnd && new Date(mockSubscriptionCurrentPeriodEnd).toLocaleDateString('en-US', {
                         month: 'long',
                         day: 'numeric'
                       })}
@@ -206,6 +264,7 @@ export default function ProfilePage() {
                     </button>
                     <button
                       onClick={() => handleCancel()}
+                      disabled={state.subscription?.status === "cancelled"}
                       className="inline-flex items-center justify-center w-full px-4 py-3 bg-white border border-red-200 text-red-600 rounded-lg hover:bg-red-50 hover:border-red-300 transition-all duration-200 shadow-sm group"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
