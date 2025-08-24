@@ -2,128 +2,93 @@
 
 ## Overview
 
-Convert an existing Figma design into a fully-functional subscription-cancellation flow for Migrate Mate. This challenge tests your ability to implement pixel-perfect UI, handle complex business logic, and maintain security best practices.
+This project implements a subscription cancellation flow for a service, with a seamless user experience while handling business logic, A/B testing for discount offers, and secure data persistence. The application is built using modern web technologies (Next.js, Typescript, Zustand, Supabase, PostgresSQL) and follows best practices for security and maintainability.
 
 ## Objective
 
-Implement the Figma-designed cancellation journey exactly on mobile + desktop, persist outcomes securely, and instrument the A/B downsell logic.
+Implement the given Figma-designed cancellation flow exactly on all responsive devices, persist outcomes securely, and instrument the A/B downsell logic.
 
-## What's Provided
 
-This repository contains:
-- ✅ Next.js + TypeScript + Tailwind scaffold
-- ✅ `seed.sql` with users table (25/29 USD plans) and empty cancellations table
-- ✅ Local Supabase configuration for development
-- ✅ Basic Supabase client setup in `src/lib/supabase.ts`
+## Tech Stack
 
-## Tech Stack (Preferred)
+- **Next.js** with App Router for server-side rendering and API routes.
+- **React** with TypeScript for building a robust and type-safe UI.
+- **Tailwind CSS** for responsive and modern styling.
+- **Supabase** for database management and authentication.
+- **Zustand** for state management.
 
-- **Next.js** with App Router
-- **React** with TypeScript
-- **Tailwind CSS** for styling
-- **Supabase** (Postgres + Row-Level Security)
+## Features
 
-> **Alternative stacks allowed** if your solution:
-> 1. Runs with `npm install && npm run dev`
-> 2. Persists to a Postgres-compatible database
-> 3. Enforces table-level security
+### 1. Subscription Cancellation Flow
 
-## Must-Have Features
+- A multi-step cancellation process tailored for employed and unemployed users.
+- Dynamic UI rendering based on user choices and employment status.
+- Final completion messages for subscription continuation, cancellation, or further steps.
 
-### 1. Progressive Flow (Figma Design)
-- Implement the exact cancellation journey from provided Figma
-- Ensure pixel-perfect fidelity on both mobile and desktop
-- Handle all user interactions and state transitions
+### 2. A/B Testing
 
-### 2. Deterministic A/B Testing (50/50 Split)
-- **On first entry**: Assign variant via cryptographically secure RNG
-- **Persist** variant to `cancellations.downsell_variant` field
-- **Reuse** variant on repeat visits (never re-randomize)
-
-**Variant A**: No downsell screen
-**Variant B**: Show "$10 off" offer
-- Price $25 → $15, Price $29 → $19
-- **Accept** → Log action, take user back to profile page (NO ACTUAL PAYMENT PROCESSING REQUIRED)
-- **Decline** → Continue to reason selection in flow
+- Implements a 50/50 split A/B testing mechanism using a cryptographically secure random number generator and persisted for future visits by storing in `cancellations` table..
+- **Variant A**: No downsell offer.
+- **Variant B**: Displays a downsell offer with a discounted price.
 
 ### 3. Data Persistence
-- Mark subscription as `pending_cancellation` in database
-- Create cancellation record with:
-  - `user_id`
-  - `downsell_variant` (A or B)
-  - `reason` (from user selection)
-  - `accepted_downsell` (boolean)
-  - `created_at` (timestamp)
 
-### 4. Security Requirements
-- **Row-Level Security (RLS)** policies
-- **Input validation** on all user inputs
-- **CSRF/XSS protection**
-- Secure handling of sensitive data
+- Records cancellation details in the database, including:
+  - User ID (uuid)
+  - Subscription ID (uuid)
+  - Employment Status ("active", "pending_cancellation", "cancelled")
+  - Downsell Variant ("A" or "B")
+  - Downsell Accepted (boolean)
+  - Cancellation reason (user input)
+  - Job Found (user input)
+  - Needs Visa (user input)
+- Updates subscription status to `pending_cancellation` or `cancelled` as appropriate.
 
-### 5. Reproducible Setup
-- `npm run db:setup` creates schema and seed data (local development)
-- Clear documentation for environment setup
+### 4. Security
 
-## Out of Scope
+- Implements CSRF protection using tokens validated on both client and server.
+- Validates all user inputs using Zod schemas.
+- Row-Level Security (RLS) policies in Supabase.
 
-- **Payment processing** - Stub with comments only
-- **User authentication** - Use mock user data
-- **Email notifications** - Not required
-- **Analytics tracking** - Focus on core functionality
+## Project Structure
 
-## Getting Started
+- `src/app`: Contains Next.js pages and API routes including `cancel` route which initiates cancellation flow.
+- `src/components`: Reusable React client-components for the cancellation flow, including a component for each step and modular components for each input type.
+- `src/lib`: Supabase client setup and definition of types schemas.
+- `src/store`: State management using Zustand.
+- `src/utils`: Helper functions for making server-side calls and persist data in database.
+- `supabase`: Configuration files for the Supabase setup.
 
-1. **Clone this repository** `git clone [repo]`
-2. **Install dependencies**: `npm install`
-3. **Set up local database**: `npm run db:setup`
-4. **Start development**: `npm run dev`
+## Setup Instructions
 
-## Database Schema
+### Prerequisites
 
-The `seed.sql` file provides a **starting point** with:
-- `users` table with sample users
-- `subscriptions` table with $25 and $29 plans
-- `cancellations` table (minimal structure - **you'll need to expand this**)
-- Basic RLS policies (enhance as needed)
+- Node.js (v20 or higher)
+- Supabase CLI
+- Docker
+- PostgreSQL
 
-### Important: Schema Design Required
+### Steps
 
-The current `cancellations` table is intentionally minimal. You'll need to:
-- **Analyze the cancellation flow requirements** from the Figma design
-- **Design appropriate table structure(s)** to capture all necessary data
-- **Consider data validation, constraints, and relationships**
-- **Ensure the schema supports the A/B testing requirements**
-
-## Evaluation Criteria
-
-- **Functionality (40%)**: Feature completeness and correctness
-- **Code Quality (25%)**: Clean, maintainable, well-structured code
-- **Pixel/UX Fidelity (15%)**: Accuracy to Figma design
-- **Security (10%)**: Proper RLS, validation, and protection
-- **Documentation (10%)**: Clear README and code comments
-
-## Deliverables
-
-1. **Working implementation** in this repository
-2. **NEW One-page README.md (replace this)** (≤600 words) explaining:
-   - Architecture decisions
-   - Security implementation
-   - A/B testing approach
-3. **Clean commit history** with meaningful messages
-
-## Timeline
-
-Submit your solution within **72 hours** of receiving this repository.
-
-## AI Tooling
-
-Using Cursor, ChatGPT, Copilot, etc. is **encouraged**. Use whatever accelerates your development—just ensure you understand the code and it runs correctly.
-
-## Questions?
-
-Review the challenge requirements carefully. If you have questions about specific implementation details, make reasonable assumptions and document them in your README.
-
----
-
-**Good luck!** We're excited to see your implementation.
+1. Clone the repository:
+   ```bash
+   git clone git@github.com:guptamayank9827/mm-cancel-flow-task-mayank.git
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Set up local database with seed initial data:
+   ```bash
+   npm run db:setup
+   ```
+4. Create a .env file in the project root and add your Supabase credentials:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+   SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
+   ```
+5. Start the development server:
+   ```bash
+   npm run dev
+   ```
