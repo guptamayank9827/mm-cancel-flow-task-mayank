@@ -8,6 +8,8 @@ import { useCancelFlowStore } from "@/store/CancelFlow";
 
 type UnemployedUserStep3Props = {
     downSellVariant: string|null;
+    downSellAccepted: boolean;
+    monthlyPricing: number;
     onSubmit: () => void;
     onAccept: () => void;
 };
@@ -18,12 +20,17 @@ export default function UnemployedUserStep3(props:UnemployedUserStep3Props) {
     const [showError, setShowError] = useState<boolean>(false);
     const { setState } = useCancelFlowStore();
 
+    const discount = 10;
+    const currentPricing = (props.monthlyPricing ?? 2500) / 100;
+    const downsellPricing = props.downSellVariant === "B" ? currentPricing - discount : currentPricing;
+
     const canMoveAhead = true;
 
-    const moveToNextStep = () => {
+    const moveToNextStep = async () => {
         props.onSubmit();
 
         setState({
+            reason,
             flowCompletedUnemployed: true
         });
     }
@@ -126,9 +133,9 @@ export default function UnemployedUserStep3(props:UnemployedUserStep3Props) {
                         className="w-full rounded-lg px-4 py-3 text-sm font-medium bg-[#43c463] text-white hover:bg-[#36a94e] transition-colors"
                         onClick={handleOffer}
                     >
-                        Get $10 off <span className="font-normal">|</span>{" "}
-                        <span className="text-white">{15}</span>{" "}
-                        <span className="line-through text-gray-200">{25}</span>
+                        Get ${discount} off <span className="font-normal">|</span>{" "}
+                        <span className="text-white">${downsellPricing}</span>{" "}
+                        <span className="line-through text-gray-200">${currentPricing}</span>
                     </button>
                 )}
 

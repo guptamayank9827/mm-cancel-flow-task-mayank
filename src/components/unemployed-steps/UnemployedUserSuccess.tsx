@@ -1,16 +1,57 @@
 'use client';
 
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Title from "@/components/Title";
+import { useCancelFlowStore } from "@/store/CancelFlow";
+import { setSubscriptionStatus, setCancellation } from '@/utils/utils';
+
 
 type UnemployedUserSuccessProps = {
     downSellAccepted: boolean;
+    monthlyPricing: number;
 }
 
-
 export default function UnemployedUserSuccess(props:UnemployedUserSuccessProps) {
-    const router = useRouter();
     const {downSellAccepted} = props;
+    const router = useRouter();
+    const { state } = useCancelFlowStore();
+
+    const discount = 10;
+    const currentPricing = (props.monthlyPricing ?? 2500) / 100;
+    const downsellPricing = downSellAccepted === true ? currentPricing - discount : currentPricing;
+
+    useEffect(() => {
+        updateSubscriptionStatus(state.subscription?.id || "", "cancelled");
+        updateCancellationEntry();
+    }, []);
+
+    const updateSubscriptionStatus = async (subscriptionId:string, newStatus:string) => {
+        try {
+            await setSubscriptionStatus(subscriptionId, newStatus);
+            
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const updateCancellationEntry = async () => {
+        const cancellation = state.cancellation;
+        
+        const updatedCancellation = {
+            id: cancellation?.id || "",
+            reason: state.reason || "",
+            accepted_downsell: props.downSellAccepted,
+            has_job: false
+        };
+
+        try {
+            await setCancellation(updatedCancellation);            
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
 
     const handleFinish = () => {
         router.push("/");
@@ -39,7 +80,7 @@ export default function UnemployedUserSuccess(props:UnemployedUserSuccessProps) 
                     that.`
                     :
                     `<p>You&apos;ve got XX days left on your current plan.</p>
-                    <p>Starting from XX date, your monthly payment will be $12.50.</p>`
+                    <p>Starting from XX date, your monthly payment will be $${downsellPricing}.</p>`
                 }
             />
 

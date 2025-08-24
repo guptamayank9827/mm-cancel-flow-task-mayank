@@ -7,6 +7,7 @@ import { SingleChoiceQuestion } from "@/lib/types";
 
 type UnemployedUserStep2Props = {
     downSellVariant: string|null;
+    monthlyPricing: number;
     onSubmit: () => void;
     onAccept: () => void;
 };
@@ -37,6 +38,10 @@ export default function UnemployedUserStep2P(props:UnemployedUserStep2Props) {
     const [emailedCount, setEmailedCount] = useState<string | null>(null);
     const [interviewedCount, setInterviewedCount] = useState<string | null>(null);
 
+    const discount = 10;
+    const currentPricing = (props.monthlyPricing ?? 2500) / 100;
+    const downsellPricing = props.downSellVariant === "B" ? currentPricing - discount : currentPricing;
+
     const canMoveAhead = true;
 
     const handleFormInput = (id:number, value:string) => {
@@ -64,6 +69,7 @@ export default function UnemployedUserStep2P(props:UnemployedUserStep2Props) {
             default: return null;
         }
     }
+    
 
     return(
         <div className="flex flex-col">
@@ -98,9 +104,9 @@ export default function UnemployedUserStep2P(props:UnemployedUserStep2Props) {
                         className="w-full rounded-lg px-4 py-3 text-sm font-medium bg-[#43c463] text-white hover:bg-[#36a94e] transition-colors"
                         onClick={handleOffer}
                     >
-                        Get $10 off <span className="font-normal">|</span>{" "}
-                        <span className="text-white">{15}</span>{" "}
-                        <span className="line-through text-gray-200">{25}</span>
+                        Get ${discount} off <span className="font-normal">|</span>{" "}
+                        <span className="text-white">${downsellPricing}</span>{" "}
+                        <span className="line-through text-gray-200">${currentPricing}</span>
                     </button>
                 )}
 

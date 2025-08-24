@@ -29,6 +29,8 @@ CREATE TABLE IF NOT EXISTS cancellations (
   downsell_variant TEXT NOT NULL CHECK (downsell_variant IN ('A', 'B')),
   reason TEXT,
   accepted_downsell BOOLEAN DEFAULT FALSE,
+  has_job BOOLEAN,
+  visa_help BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 

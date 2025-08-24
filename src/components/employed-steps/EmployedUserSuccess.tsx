@@ -1,9 +1,11 @@
 'use client';
 
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Title from "@/components/Title";
 import { useCancelFlowStore } from "@/store/CancelFlow";
+import { setSubscriptionStatus, setCancellation } from '@/utils/utils';
 
 
 export default function EmployedUserSuccess() {
@@ -11,6 +13,37 @@ export default function EmployedUserSuccess() {
 
     const { state } = useCancelFlowStore();
     const hasLawyer = state.hasLawyer ?? "no";
+
+    useEffect(() => {
+        updateSubscriptionStatus(state.subscription?.id || "", "cancelled");
+        updateCancellationEntry();
+    }, []);
+
+    const updateSubscriptionStatus = async (subscriptionId:string, newStatus:string) => {
+        try {
+            await setSubscriptionStatus(subscriptionId, newStatus);
+            
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const updateCancellationEntry = async () => {
+        const cancellation = state.cancellation;
+        
+        const updatedCancellation = {
+            id: cancellation?.id || "",
+            has_job: true,
+            visa_help: hasLawyer === "yes" ? false : true,
+            accepted_downsell: false
+        };
+
+        try {
+           await setCancellation(updatedCancellation);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const handleFinish = () => {
         router.push("/");
