@@ -1,6 +1,6 @@
 'use client';
 
-import {useState} from 'react';
+import { useState, useMemo } from 'react';
 import Title from "@/components/Title";
 import FormInput from "@/components/FormInput";
 import { SingleChoiceQuestion } from "@/lib/types";
@@ -42,7 +42,10 @@ export default function UnemployedUserStep2P(props:UnemployedUserStep2Props) {
     const currentPricing = (props.monthlyPricing ?? 2500) / 100;
     const downsellPricing = props.downSellVariant === "B" ? currentPricing - discount : currentPricing;
 
-    const canMoveAhead = true;
+    const canMoveAhead = useMemo(
+        () => !!(appliedCount && emailedCount && interviewedCount),
+        [appliedCount, emailedCount, interviewedCount]
+    );
 
     const handleFormInput = (id:number, value:string) => {
         switch (id) {
@@ -54,7 +57,17 @@ export default function UnemployedUserStep2P(props:UnemployedUserStep2Props) {
     }
 
     const moveToNextStep = () => {
+        if(!canMoveAhead)   return;
+
         props.onSubmit();
+
+        resetInputs();
+    }
+
+    const resetInputs = () => {
+        setAppliedCount(null);
+        setEmailedCount(null);
+        setInterviewedCount(null);
     }
 
     const handleOffer = () => {
@@ -112,7 +125,7 @@ export default function UnemployedUserStep2P(props:UnemployedUserStep2Props) {
 
                 <button
                     onClick={moveToNextStep}
-                    disabled={false}
+                    disabled={!canMoveAhead}
                     className={`w-full mt-2 rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
                         canMoveAhead
                         ? "bg-purple-500 text-white hover:bg-[#7b40fc]"

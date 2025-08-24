@@ -66,6 +66,7 @@ export default function CancelPage() {
     }
 
     const fetchAndSetDownsellVariant = async(userId:string, subscriptionId:string) => {
+        if(!userId || !subscriptionId)  return;
         try {
             const cancellationEntry = await fetchDownsellVariant(userId, subscriptionId);
             const downsellVariant = cancellationEntry?.downsell_variant;
