@@ -28,7 +28,7 @@ export default function Radio(props:RadioProps) {
                                         checked={props.selectedValue === option}
                                         onChange={() => props.onSelect(id, option)}
                                     />
-                                    {option}
+                                    {option.charAt(0).toUpperCase() + option.slice(1)}
                                 </label>
                             </div>
                         :

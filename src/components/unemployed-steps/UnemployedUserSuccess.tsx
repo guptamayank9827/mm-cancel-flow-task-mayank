@@ -97,7 +97,7 @@ export default function UnemployedUserSuccess(props:UnemployedUserSuccessProps) 
 
             <button
                 onClick={handleFinish}
-                className="mt-2 px-6 py-2 rounded-lg bg-purple-500 text-white font-medium hover:bg-purple-600 transition"
+                className="mt-2 px-6 py-2 rounded-lg bg-purple-500 text-lg text-white font-medium hover:bg-purple-600 transition"
             >
                 {downSellAccepted === false ? "Back to Jobs":"Land your dream role"}
             </button>

@@ -150,7 +150,7 @@ export default function UnemployedUserStep3(props:UnemployedUserStep3Props) {
             <div className="mt-5">
                 {props.downSellVariant === "B" && (
                     <button
-                        className="w-full rounded-lg px-4 py-3 text-sm font-medium bg-[#43c463] text-white hover:bg-[#36a94e] transition-colors"
+                        className="w-full rounded-lg px-4 py-3 text-lg font-medium bg-[#43c463] text-white hover:bg-[#36a94e] transition-colors"
                         onClick={handleOffer}
                     >
                         Get ${discount} off <span className="font-normal">|</span>{" "}
@@ -162,7 +162,7 @@ export default function UnemployedUserStep3(props:UnemployedUserStep3Props) {
                 <button
                     onClick={moveToNextStep}
                     disabled={!canMoveAhead}
-                    className={`w-full mt-2 rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
+                    className={`w-full mt-2 rounded-lg px-4 py-3 text-lg font-medium transition-colors ${
                         canMoveAhead
                         ? "bg-purple-500 text-white hover:bg-[#7b40fc]"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"

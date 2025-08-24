@@ -107,7 +107,7 @@ export default function EmployedUserStep1(props:EmployedUserStep1Props) {
                 <button
                     onClick={moveToNextStep}
                     disabled={!canMoveAhead}
-                    className={`w-full rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
+                    className={`w-full rounded-lg px-4 py-3 text-xl font-medium transition-colors ${
                         canMoveAhead
                         ? "bg-purple-500 text-white hover:bg-[#7b40fc]"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"

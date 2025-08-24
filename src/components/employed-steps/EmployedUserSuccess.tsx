@@ -165,7 +165,7 @@ export default function EmployedUserSuccess() {
 
             <button
                 onClick={handleFinish}
-                className="mt-2 px-6 py-2 rounded-lg bg-purple-500 text-white font-medium hover:bg-purple-600 transition"
+                className="mt-2 px-6 py-2 rounded-lg bg-purple-500 text-lg text-white font-medium hover:bg-purple-600 transition"
             >
                 Finish
             </button>
