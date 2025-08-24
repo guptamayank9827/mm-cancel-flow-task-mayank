@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import * as crypto from 'crypto';
 import { fetchUser, fetchUserSubscription, fetchDownsellVariant, insertCancellationEntry } from '@/utils/utils';
 
-
 // components
 import Header from '@/components/Header';
 import StartCancel from '@/components/StartCancel';
