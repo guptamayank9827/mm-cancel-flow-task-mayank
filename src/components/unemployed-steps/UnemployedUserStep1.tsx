@@ -42,11 +42,11 @@ export default function UnemployedUserStep1(props:UnemployedUserStep1Props) {
                         Here&apos;s ${discount} off until you find a job.
                     </div>
                     <div className="flex items-center md:justify-center gap-4 mb-2">
-                        <div className="text-lg font-bold text-purple-500">
-                            {downsellPricing}/month
+                        <div className="text-2xl font-bold text-purple-500">
+                            ${downsellPricing}/month
                         </div>
                         <div className="text-black line-through">
-                            {currentPricing}/month
+                            ${currentPricing}/month
                         </div>
                     </div>
                     <button
@@ -65,7 +65,7 @@ export default function UnemployedUserStep1(props:UnemployedUserStep1Props) {
 
             <div className="mt-5">
                 <button
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 mt-2 text-gray-700 font-semibold bg-white hover:bg-gray-100 transition"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-3 mt-2 text-xl text-gray-700 font-semibold bg-white hover:bg-gray-100 transition"
                     onClick={moveToNextStep}
                 >
                     No thanks

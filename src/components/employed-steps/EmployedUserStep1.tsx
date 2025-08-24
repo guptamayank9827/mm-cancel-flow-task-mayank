@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Title from '@/components/Title';
 import FormInput from '@/components/FormInput';
 import { SingleChoiceQuestion } from '@/lib/types';
@@ -44,7 +44,10 @@ export default function EmployedUserStep1(props:EmployedUserStep1Props) {
     const [interviewedCount, setInterviewedCount] = useState<string | null>(null);
     const { setState } = useCancelFlowStore();
 
-    const canMoveAhead = true;
+    const canMoveAhead = useMemo(
+        () => !!(foundViaMM && appliedCount && emailedCount && interviewedCount),
+        [foundViaMM, appliedCount, emailedCount, interviewedCount]
+    );
 
     const handleFormInput = (id:number, value:string) => {
         switch (id) {
@@ -57,8 +60,19 @@ export default function EmployedUserStep1(props:EmployedUserStep1Props) {
     }
 
     const moveToNextStep = () => {
+        if(!canMoveAhead)   return;
+
         props.onSubmit();
         setState({ foundViaMM:foundViaMM === "yes" ? "yes" : "no" });
+
+        resetInputs();
+    }
+
+    const resetInputs = () => {
+        setFoundViaMM(null);
+        setAppliedCount(null);
+        setEmailedCount(null);
+        setInterviewedCount(null);
     }
 
     const getSelectedValueByQuestionId = (id:number) => {
@@ -92,8 +106,8 @@ export default function EmployedUserStep1(props:EmployedUserStep1Props) {
             <div className="mt-5">
                 <button
                     onClick={moveToNextStep}
-                    disabled={false}
-                    className={`w-full rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
+                    disabled={!canMoveAhead}
+                    className={`w-full rounded-lg px-4 py-3 text-xl font-medium transition-colors ${
                         canMoveAhead
                         ? "bg-purple-500 text-white hover:bg-[#7b40fc]"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"

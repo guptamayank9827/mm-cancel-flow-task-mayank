@@ -25,7 +25,7 @@ export default function SingleChoice(props:SingleChoiceProps) {
                         onClick={() => props.onSelect(question.id, option)}
                         className={`${defaultClasses} ${selectedValue === option ? selectedClasses : nonSelectedClasses}`}
                     >
-                        {option}
+                        {option.charAt(0).toUpperCase() + option.slice(1)}
                     </button>
                 ))}
             </div>

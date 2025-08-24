@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import * as crypto from 'crypto';
 import { fetchUser, fetchUserSubscription, fetchDownsellVariant, insertCancellationEntry } from '@/utils/utils';
 
-
 // components
 import Header from '@/components/Header';
 import StartCancel from '@/components/StartCancel';
@@ -67,6 +66,7 @@ export default function CancelPage() {
     }
 
     const fetchAndSetDownsellVariant = async(userId:string, subscriptionId:string) => {
+        if(!userId || !subscriptionId)  return;
         try {
             const cancellationEntry = await fetchDownsellVariant(userId, subscriptionId);
             const downsellVariant = cancellationEntry?.downsell_variant;

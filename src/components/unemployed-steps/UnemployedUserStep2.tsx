@@ -1,6 +1,6 @@
 'use client';
 
-import {useState} from 'react';
+import { useState, useMemo } from 'react';
 import Title from "@/components/Title";
 import FormInput from "@/components/FormInput";
 import { SingleChoiceQuestion } from "@/lib/types";
@@ -42,7 +42,10 @@ export default function UnemployedUserStep2P(props:UnemployedUserStep2Props) {
     const currentPricing = (props.monthlyPricing ?? 2500) / 100;
     const downsellPricing = props.downSellVariant === "B" ? currentPricing - discount : currentPricing;
 
-    const canMoveAhead = true;
+    const canMoveAhead = useMemo(
+        () => !!(appliedCount && emailedCount && interviewedCount),
+        [appliedCount, emailedCount, interviewedCount]
+    );
 
     const handleFormInput = (id:number, value:string) => {
         switch (id) {
@@ -54,7 +57,17 @@ export default function UnemployedUserStep2P(props:UnemployedUserStep2Props) {
     }
 
     const moveToNextStep = () => {
+        if(!canMoveAhead)   return;
+
         props.onSubmit();
+
+        resetInputs();
+    }
+
+    const resetInputs = () => {
+        setAppliedCount(null);
+        setEmailedCount(null);
+        setInterviewedCount(null);
     }
 
     const handleOffer = () => {
@@ -101,7 +114,7 @@ export default function UnemployedUserStep2P(props:UnemployedUserStep2Props) {
             <div className="mt-5">
                 {props.downSellVariant === "B" && (
                     <button
-                        className="w-full rounded-lg px-4 py-3 text-sm font-medium bg-[#43c463] text-white hover:bg-[#36a94e] transition-colors"
+                        className="w-full rounded-lg px-4 py-3 text-xl font-medium bg-[#43c463] text-white hover:bg-[#36a94e] transition-colors"
                         onClick={handleOffer}
                     >
                         Get ${discount} off <span className="font-normal">|</span>{" "}
@@ -112,8 +125,8 @@ export default function UnemployedUserStep2P(props:UnemployedUserStep2Props) {
 
                 <button
                     onClick={moveToNextStep}
-                    disabled={false}
-                    className={`w-full mt-2 rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
+                    disabled={!canMoveAhead}
+                    className={`w-full mt-2 rounded-lg px-4 py-3 text-xl font-medium transition-colors ${
                         canMoveAhead
                         ? "bg-purple-500 text-white hover:bg-[#7b40fc]"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"

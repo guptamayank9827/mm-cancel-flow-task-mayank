@@ -1,6 +1,6 @@
 'use client';
 
-import {useState} from 'react';
+import { useState, useMemo } from 'react';
 import Title from '@/components/Title';
 import FormInput from '@/components/FormInput';
 import { RadioQuestion, NumberQuestion, TextAreaQuestion } from '@/lib/types';
@@ -18,13 +18,20 @@ export default function UnemployedUserStep3(props:UnemployedUserStep3Props) {
     const [reason, setReason] = useState<string|null>(null);
     const [reasonComment, setReasonComment] = useState<string>("");
     const [showError, setShowError] = useState<boolean>(false);
+    const [secondaryQuestionType, setSecondaryQuestionType] = useState("text");
     const { setState } = useCancelFlowStore();
 
     const discount = 10;
     const currentPricing = (props.monthlyPricing ?? 2500) / 100;
     const downsellPricing = props.downSellVariant === "B" ? currentPricing - discount : currentPricing;
 
-    const canMoveAhead = true;
+    const canMoveAhead = useMemo(
+        () => !!reason && (
+            (secondaryQuestionType === "text" && reasonComment.trim().length >= 25)
+            || 
+            secondaryQuestionType === "number" && reasonComment.length > 0),
+        [reason, reasonComment]
+    );
 
     const moveToNextStep = async () => {
         props.onSubmit();
@@ -52,7 +59,17 @@ export default function UnemployedUserStep3(props:UnemployedUserStep3Props) {
     }
 
     const handleOffer = () => {
+        if(!canMoveAhead)   return;
+
         props.onAccept();
+
+        resetInputs();
+    };
+
+    const resetInputs = () => {
+        setReason(null);
+        setReasonComment("");
+        setShowError(false);
     };
 
     const QUESTION:RadioQuestion = {
@@ -71,6 +88,7 @@ export default function UnemployedUserStep3(props:UnemployedUserStep3Props) {
                     type: "number",
                     symbol: "$"
                 };
+                if(secondaryQuestionType !== "number")  setSecondaryQuestionType("number");
                 return(
                     <FormInput
                         key={`sq0`}
@@ -89,6 +107,8 @@ export default function UnemployedUserStep3(props:UnemployedUserStep3Props) {
                     type: "textarea",
                     minChars: 25
                 };
+                if(secondaryQuestionType !== "text")  setSecondaryQuestionType("text");
+
                 if(reason === QUESTION.options[1])  SECONDARY_QUESTION_1.question = "What can we change to make the platform more helpful?*";
                 else if(reason === QUESTION.options[2])  SECONDARY_QUESTION_1.question = "In which way can we make the jobs more relevant?*";
                 else if(reason === QUESTION.options[3])  SECONDARY_QUESTION_1.question = "What changed for you to decide to not move?*";
@@ -130,7 +150,7 @@ export default function UnemployedUserStep3(props:UnemployedUserStep3Props) {
             <div className="mt-5">
                 {props.downSellVariant === "B" && (
                     <button
-                        className="w-full rounded-lg px-4 py-3 text-sm font-medium bg-[#43c463] text-white hover:bg-[#36a94e] transition-colors"
+                        className="w-full rounded-lg px-4 py-3 text-lg font-medium bg-[#43c463] text-white hover:bg-[#36a94e] transition-colors"
                         onClick={handleOffer}
                     >
                         Get ${discount} off <span className="font-normal">|</span>{" "}
@@ -141,8 +161,8 @@ export default function UnemployedUserStep3(props:UnemployedUserStep3Props) {
 
                 <button
                     onClick={moveToNextStep}
-                    disabled={false}
-                    className={`w-full mt-2 rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
+                    disabled={!canMoveAhead}
+                    className={`w-full mt-2 rounded-lg px-4 py-3 text-lg font-medium transition-colors ${
                         canMoveAhead
                         ? "bg-purple-500 text-white hover:bg-[#7b40fc]"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"

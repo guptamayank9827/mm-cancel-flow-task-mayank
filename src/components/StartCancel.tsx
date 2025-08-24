@@ -24,7 +24,8 @@ export default function StartCancel(props:StartCancelProps) {
                         Hey mate,
                         <br />
                         <span className="block">Quick one before you go.</span>
-                        <i>Have you found a job yet?</i>
+                        <br /><br />
+                        <i className="block">Have you found a job yet?</i>
                     `}
                     subtitle={`
                         Whatever your answer, we just want to help you take the next step.

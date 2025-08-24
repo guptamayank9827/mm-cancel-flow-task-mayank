@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Title from '@/components/Title';
 import FormInput from '@/components/FormInput';
 import { RadioQuestion, TextQuestion } from '@/lib/types';
@@ -35,7 +35,10 @@ export default function EmployedUserStep3(props:EmployedUserStep3Props) {
                             <br className="hidden md:block" />
                             Which visa would you like to apply for?*`;
 
-    const canMoveAhead = true;
+    const canMoveAhead = useMemo(
+        () => !!hasLawyer && visa.trim().length > 0,
+        [hasLawyer, visa]
+    );
 
     const handleLawyerChange = (id:number, val:string) => {
         if(val === "yes")   setHasLawyer("yes");
@@ -47,13 +50,22 @@ export default function EmployedUserStep3(props:EmployedUserStep3Props) {
     }
 
     const moveToNextStep = () => {
+        if(!canMoveAhead)   return;
+
         props.onSubmit();
 
         setState({
             hasLawyer: hasLawyer === "yes" ? "yes" : "no",
             flowCompletedEmployed: true
         });
+
+        resetInputs();
     }
+
+    const resetInputs = () => {
+        setHasLawyer(null);
+        setVisa("");
+    };
 
     return(
         <div className="flex flex-col">
@@ -97,8 +109,8 @@ export default function EmployedUserStep3(props:EmployedUserStep3Props) {
             <div className="mt-5">
                 <button
                     onClick={moveToNextStep}
-                    disabled={false}
-                    className={`w-full rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
+                    disabled={!canMoveAhead}
+                    className={`w-full rounded-lg px-4 py-3 text-lg font-medium transition-colors ${
                         canMoveAhead
                         ? "bg-purple-500 text-white hover:bg-[#7b40fc]"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"
